@@ -14,3 +14,6 @@
     loop_var: instance
   when:
     - tomcat_instances is defined
+
+- debug:
+    msg: "tomcat_unarchive_url: {{ tomcat_unarchive_url }}"

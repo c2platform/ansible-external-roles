@@ -1,7 +1,4 @@
 ---
-- debug:
-    msg: "tomcat_unarchive_url: {{ tomcat_unarchive_url }}"
-
 - name: ensure instance group exists
   ansible.builtin.group:
     name: "{{ instance.group | default(tomcat_group) }}"
