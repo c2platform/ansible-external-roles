@@ -2,9 +2,9 @@
 
 Install and configure tomcat on your system.
 
-|Travis|GitHub|Quality|Downloads|Version|
+|GitHub|GitLab|Quality|Downloads|Version|
 |------|------|-------|---------|-------|
-|[![travis](https://travis-ci.com/robertdebock/ansible-role-tomcat.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-tomcat)|[![github](https://github.com/robertdebock/ansible-role-tomcat/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-tomcat/actions)|[![quality](https://img.shields.io/ansible/quality/22945)](https://galaxy.ansible.com/robertdebock/tomcat)|[![downloads](https://img.shields.io/ansible/role/d/22945)](https://galaxy.ansible.com/robertdebock/tomcat)|[![Version](https://img.shields.io/github/release/robertdebock/ansible-role-tomcat.svg)](https://github.com/robertdebock/ansible-role-tomcat/releases/)|
+|[![github](https://github.com/robertdebock/ansible-role-tomcat/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-tomcat/actions)|[![gitlab](https://gitlab.com/robertdebock/ansible-role-tomcat/badges/master/pipeline.svg)](https://gitlab.com/robertdebock/ansible-role-tomcat)|[![quality](https://img.shields.io/ansible/quality/22945)](https://galaxy.ansible.com/robertdebock/tomcat)|[![downloads](https://img.shields.io/ansible/role/d/22945)](https://galaxy.ansible.com/robertdebock/tomcat)|[![Version](https://img.shields.io/github/release/robertdebock/ansible-role-tomcat.svg)](https://github.com/robertdebock/ansible-role-tomcat/releases/)|
 
 ## [Example Playbook](#example-playbook)
 
@@ -130,6 +130,8 @@ tomcat_ssl_connector_port: 8443
 tomcat_shutdown_port: 8005
 tomcat_ajp_port: 8009
 tomcat_jre_home: /usr
+tomcat_service_state: started
+tomcat_service_enabled: yes
 # You can bind Tomcat to a specified address globally using this variable, or
 # in the `tomcat_instances`. The `tomcat_instances.address` is more specific
 # so it takes priority over `tomcat_address`.
@@ -170,10 +172,8 @@ tomcat_instances:
     access_log_prefix: "{{ tomcat_access_log_prefix }}"
     access_log_suffix: "{{ tomcat_access_log_suffix }}"
     access_log_pattern: "{{ tomcat_access_log_pattern }}"
-
-# When downloading wars, should the SSL certificate be valid? (Impossible for
-# CentOS 6, so default: no.)
-tomcat_validate_certs: no
+    service_state: "{{ tomcat_service_state }}"
+    service_enabled: "{{ tomcat_service_enabled }}"
 
 # The explicit version to use when referring to the short name.
 tomcat_version7: 7.0.107
@@ -198,24 +198,25 @@ tomcat_unarchive_url: "{{ _tomcat_unarchive_urls[tomcat_version].url }}"
 
 ## [Requirements](#requirements)
 
-- Access to a repository containing packages, likely on the internet.
-- A recent version of Ansible. (Tests run on the current, previous and next release of Ansible.)
+- pip packages listed in [requirements.txt](https://github.com/robertdebock/ansible-role-tomcat/blob/master/requirements.txt).
 
 ## [Status of requirements](#status-of-requirements)
 
-| Requirement | Travis | GitHub |
+The following roles are used to prepare a system. You may choose to prepare your system in another way, I have tested these roles as well.
+
+| Requirement | GitHub | GitLab |
 |-------------|--------|--------|
-| [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-bootstrap.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-bootstrap) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-bootstrap/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-bootstrap/actions) |
-| [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-core_dependencies.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-core_dependencies) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-core_dependencies/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-core_dependencies/actions) |
-| [robertdebock.java](https://galaxy.ansible.com/robertdebock/java) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-java.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-java) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-java/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-java/actions) |
-| [robertdebock.service](https://galaxy.ansible.com/robertdebock/service) | [![Build Status Travis](https://travis-ci.com/robertdebock/ansible-role-service.svg?branch=master)](https://travis-ci.com/robertdebock/ansible-role-service) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-service/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-service/actions) |
+| [robertdebock.bootstrap](https://galaxy.ansible.com/robertdebock/bootstrap) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-bootstrap/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-bootstrap/actions) | [![Build Status GitLab ](https://gitlab.com/robertdebock/ansible-role-ansible-role-bootstrap/badges/master/pipeline.svg)](https://gitlab.com/robertdebock/ansible-role-bootstrap)
+| [robertdebock.core_dependencies](https://galaxy.ansible.com/robertdebock/core_dependencies) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-core_dependencies/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-core_dependencies/actions) | [![Build Status GitLab ](https://gitlab.com/robertdebock/ansible-role-ansible-role-core_dependencies/badges/master/pipeline.svg)](https://gitlab.com/robertdebock/ansible-role-core_dependencies)
+| [robertdebock.java](https://galaxy.ansible.com/robertdebock/java) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-java/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-java/actions) | [![Build Status GitLab ](https://gitlab.com/robertdebock/ansible-role-ansible-role-java/badges/master/pipeline.svg)](https://gitlab.com/robertdebock/ansible-role-java)
+| [robertdebock.service](https://galaxy.ansible.com/robertdebock/service) | [![Build Status GitHub](https://github.com/robertdebock/ansible-role-service/workflows/Ansible%20Molecule/badge.svg)](https://github.com/robertdebock/ansible-role-service/actions) | [![Build Status GitLab ](https://gitlab.com/robertdebock/ansible-role-ansible-role-service/badges/master/pipeline.svg)](https://gitlab.com/robertdebock/ansible-role-service)
 
 ## [Context](#context)
 
 This role is a part of many compatible roles. Have a look at [the documentation of these roles](https://robertdebock.nl/) for further information.
 
 Here is an overview of related roles:
-![dependencies](https://raw.githubusercontent.com/robertdebock/drawings/artifacts/tomcat.png "Dependency")
+![dependencies](https://raw.githubusercontent.com/robertdebock/ansible-role-tomcat/png/requirements.png "Dependencies")
 
 ## [Compatibility](#compatibility)
 
@@ -227,9 +228,9 @@ This role has been tested on these [container images](https://hub.docker.com/u/r
 |debian|buster, bullseye|
 |fedora|all|
 |opensuse|all|
-|ubuntu|focal, bionic, xenial|
+|ubuntu|focal, bionic|
 
-The minimum version of Ansible required is 2.9, tests have been done to:
+The minimum version of Ansible required is 2.10, tests have been done to:
 
 - The previous version.
 - The current version.
@@ -252,39 +253,7 @@ This role [refers to a version](https://github.com/robertdebock/ansible-role-tom
 - [Tomcat version 9](https://tomcat.apache.org/download-90.cgi).
 
 This version reference means a role may get outdated. Monthly tests occur to see if [bit-rot](https://en.wikipedia.org/wiki/Software_rot) occured. If you however find a problem, please create an issue, I'll get on it as soon as possible.
-## [Testing](#testing)
-
-[Unit tests](https://travis-ci.com/robertdebock/ansible-role-tomcat) are done on every commit, pull request, release and periodically.
-
 If you find issues, please register them in [GitHub](https://github.com/robertdebock/ansible-role-tomcat/issues)
-
-Testing is done using [Tox](https://tox.readthedocs.io/en/latest/) and [Molecule](https://github.com/ansible/molecule):
-
-[Tox](https://tox.readthedocs.io/en/latest/) tests multiple ansible versions.
-[Molecule](https://github.com/ansible/molecule) tests multiple distributions.
-
-To test using the defaults (any installed ansible version, namespace: `robertdebock`, image: `fedora`, tag: `latest`):
-
-```
-molecule test
-
-# Or select a specific image:
-image=ubuntu molecule test
-# Or select a specific image and a specific tag:
-image="debian" tag="stable" tox
-```
-
-Or you can test multiple versions of Ansible, and select images:
-Tox allows multiple versions of Ansible to be tested. To run the default (namespace: `robertdebock`, image: `fedora`, tag: `latest`) tests:
-
-```
-tox
-
-# To run CentOS (namespace: `robertdebock`, tag: `latest`)
-image="centos" tox
-# Or customize more:
-image="debian" tag="stable" tox
-```
 
 ## [License](#license)
 
@@ -294,10 +263,11 @@ Apache-2.0
 
 I'd like to thank everybody that made contributions to this repository. It motivates me, improves the code and is just fun to collaborate.
 
+- [gaima8](https://github.com/gaima8)
 - [brunoleon](https://github.com/brunoleon)
+- [javid90khan](https://github.com/javid90khan)
 - [patsevanton](https://github.com/patsevanton)
 - [till](https://github.com/till)
-- [DBarthe](https://github.com/DBarthe)
 
 ## [Author Information](#author-information)
 
