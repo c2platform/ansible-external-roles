@@ -146,3 +146,26 @@ tomcat_services:
             prefix: localhost_access_log
             suffix: .txt
             pattern: "%h %l %u %t &quot;%r&quot; %s %b"
+
+tomcat_roles:
+  - admin
+  - manager
+  - admin-gui
+  - admin-script
+  - manager-gui
+  - manager-script
+  - manager-jmx
+  - manager-status
+
+# Note: users with the manager-gui role should not be granted either the manager-script or manager-jmx roles
+tomcat_users:
+  admin:
+    username: admin
+    password: supersecure
+    roles: admin, manager, admin-gui, admin-script, manager-gui, manager-status
+    state: absent # present
+  jmx:
+    username: jmx
+    password: supersecure
+    roles: manager-jmx
+    state: absent # present

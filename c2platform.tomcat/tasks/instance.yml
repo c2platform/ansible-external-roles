@@ -50,6 +50,15 @@
   notify:
     - restart tomcat instance
 
+- name: configure tomcat instance - tomcat-users.xml
+  ansible.builtin.template:
+    src: tomcat-users.xml.j2
+    dest: "{{ tomcat_directory }}/{{ instance.name }}/conf/tomcat-users.xml"
+    mode: "0644"
+    backup: yes
+  notify:
+    - restart tomcat instance
+
 - name: configure tomcat instance - setenv.sh
   ansible.builtin.template:
     src: setenv.sh.j2
