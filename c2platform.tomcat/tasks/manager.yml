@@ -1,0 +1,9 @@
+---
+- name: configure tomcat instance - tomcat-users.xml
+  ansible.builtin.template:
+    src: context.xml.j2
+    dest: "{{ tomcat_directory }}/{{ instance.name }}/webapps/manager/META-INF/context.xml"
+    mode: "0644"
+    backup: yes
+  notify:
+    - restart tomcat instance

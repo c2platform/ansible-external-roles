@@ -169,3 +169,8 @@ tomcat_users:
     password: supersecure
     roles: manager-jmx
     state: absent # present
+
+tomcat_manager:
+  valve:
+    className: org.apache.catalina.valves.RemoteAddrValve
+    allow: "127\\.\\d+\\.\\d+\\.\\d+|::1|0:0:0:0:0:0:0:1"

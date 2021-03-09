@@ -118,3 +118,5 @@
     loop_var: lib
   when:
     - instance.libs is defined
+
+- include_tasks: manager.yml
