@@ -94,3 +94,55 @@ tomcat_listeners_default:
   - className: org.apache.catalina.mbeans.GlobalResourcesLifecycleListener
   - className: org.apache.catalina.core.ThreadLocalLeakPreventionListener
 
+tomcat_services:
+  - name: Catalina
+    connectors:
+      - port: 8080
+        protocol: HTTP/1.1
+        connectionTimeout: 20000
+        URIEncoding: UTF-8
+        # redirectPort: "{{ tomcat_ssl_connector_port }}" # https disabled
+      - port: 8443
+        protocol: HTTP/1.1
+        SSLEnabled: "true"
+        maxThreads: 150
+        scheme: https
+        secure: true
+        clientAuth: false
+        sslProtocol: TLSv1.2
+        SSLCipherSuite: ECDHE-RSA-AES128-GCM-SHA256
+        SSLCertificateFile: /etc/ssl/myservice.crt
+        SSLCertificateKeyFile: /etc/ssl/myservice.key
+        SSLHonorCipherOrder: "true"
+        server: server
+        state: absent # # https disabled
+      - port: 8009
+        protocol: AJP/1.3
+        tomcatAuthentication: "true"
+        # redirectPort: "{{ tomcat_ssl_connector_port }}" # https disabled
+    engine:
+      properties:
+        name: Catalina
+        defaultHost: localhost
+      #realms:
+      #  - className: org.apache.catalina.realm.UserDatabaseRealm
+      #    resourceName: UserDatabase
+      realms:
+        - properties:
+            className: org.apache.catalina.realm.LockOutRealm
+          realm:
+            properties:
+              className: org.apache.catalina.realm.UserDatabaseRealm
+              resourceName: UserDatabase
+      host:
+        properties:
+          name: localhost
+          appBase: webapps
+          unpackWARS: "true"
+          autoDeploy: "true"
+        valves:
+          - className: org.apache.catalina.valves.AccessLogValve
+            directory: logs
+            prefix: localhost_access_log
+            suffix: .txt
+            pattern: "%h %l %u %t &quot;%r&quot; %s %b"
