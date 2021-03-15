@@ -119,6 +119,7 @@ tomcat_services:
       - port: 8009
         protocol: AJP/1.3
         tomcatAuthentication: "true"
+        secretRequired: "false"
         # redirectPort: "{{ tomcat_ssl_connector_port }}" # https disabled
     engine:
       properties:
