@@ -30,7 +30,7 @@
     - restart postfix
 
 - name: force all notified handlers to run
-  ansible.builtin.meta: flush_handlers
+  meta: flush_handlers
 
 - name: configure aliases
   ansible.builtin.lineinfile:
@@ -80,7 +80,7 @@
     label: "{{ item.domain }}"
 
 - name: force all notified handlers to run
-  ansible.builtin.meta: flush_handlers
+  meta: flush_handlers
 
 - name: start and enable postfix
   ansible.builtin.service:

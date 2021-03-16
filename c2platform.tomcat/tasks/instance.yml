@@ -1,11 +1,11 @@
 ---
 - name: ensure instance group exists
-  ansible.builtin.group:
+  group:
     name: "{{ instance.group | default(tomcat_group) }}"
     state: present
 
 - name: ensure instance user exists
-  ansible.builtin.user:
+  user:
     name: "{{ instance.user | default(tomcat_user) }}"
     state: present
     group: "{{ instance.group | default(tomcat_group) }}"
@@ -13,7 +13,7 @@
     system: yes
 
 - name: ensure instance directory exists
-  ansible.builtin.file:
+  file:
     path: "{{ tomcat_directory }}/{{ instance.name }}"
     state: directory
     owner: "{{ instance.user | default(tomcat_user) }}"
@@ -21,13 +21,13 @@
     mode: "0755"
 
 - name: download tomcat source
-  ansible.builtin.get_url:
+  get_url:
     url: "{{ tomcat_unarchive_url }}"
     dest: "{{ tomcat_directory }}/{{ instance.name }}/{{ tomcat_unarchive_url|basename }}"
     mode: "440"
 
 - name: install tomcat instance
-  ansible.builtin.unarchive:
+  unarchive:
     src: "{{ tomcat_directory }}/{{ instance.name }}/{{ tomcat_unarchive_url|basename }}"
     dest: "{{ tomcat_directory }}/{{ instance.name }}"
     owner: "{{ instance.user | default(tomcat_user) }}"
@@ -38,11 +38,11 @@
     mode: "0755"
 
 - name: save instance name
-  ansible.builtin.set_fact:
+  set_fact:
     instance_name: "{{ instance.name }}"
 
 - name: configure tomcat instance - server.xml
-  ansible.builtin.template:
+  template:
     src: server.xml.j2
     dest: "{{ tomcat_directory }}/{{ instance.name }}/conf/server.xml"
     mode: "0644"
@@ -51,7 +51,7 @@
     - restart tomcat instance
 
 - name: configure tomcat instance - tomcat-users.xml
-  ansible.builtin.template:
+  template:
     src: tomcat-users.xml.j2
     dest: "{{ tomcat_directory }}/{{ instance.name }}/conf/tomcat-users.xml"
     mode: "0644"
@@ -60,7 +60,7 @@
     - restart tomcat instance
 
 - name: configure tomcat instance - setenv.sh
-  ansible.builtin.template:
+  template:
     src: setenv.sh.j2
     dest: "{{ tomcat_directory }}/{{ instance.name }}/bin/setenv.sh"
     mode: "0644"
@@ -71,7 +71,7 @@
 
 # TODO
 #- name: place neutral default page
-#  ansible.builtin.copy:
+#  copy:
 #    content: "Please select an application by adding the context to the URL."
 #    dest: "{{ tomcat_directory }}/{{ instance.name }}/webapps/ROOT/index.html"
 #    owner: "{{ instance.user | default(tomcat_user) }}"
@@ -79,7 +79,7 @@
 #    mode: "0640"
 
 - name: loop over config_files
-  ansible.builtin.include: config_file.yml
+  include: config_file.yml
   loop: "{{ instance.config_files }}"
   loop_control:
     loop_var: config_file
@@ -88,7 +88,7 @@
     - restart tomcat instance
 
 - name: create service instance
-  ansible.builtin.import_role:
+  import_role:
     name: robertdebock.service
   vars:
     service_list:
@@ -99,13 +99,13 @@
         group_name: "{{ instance.group | default(tomcat_group) }}"
 
 - name: manage tomcat service
-  ansible.builtin.service:
+  service:
     name: "{{ instance.name }}"
     state: "{{ instance.service_state | default(tomcat_service_state) }}"
     enabled: "{{ instance.service_enabled | default(tomcat_service_enabled) }}"
 
 - name: loop over wars
-  ansible.builtin.include: war.yml
+  include: war.yml
   loop: "{{ instance.wars }}"
   loop_control:
     loop_var: war
@@ -113,7 +113,7 @@
     - instance.wars is defined
 
 - name: loop over libs
-  ansible.builtin.include: lib.yml
+  include: lib.yml
   loop: "{{ instance.libs }}"
   loop_control:
     loop_var: lib
