@@ -3,6 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ lib.url }}"
     dest: "{{ tomcat_directory }}//{{ instance.name }}/lib/"
+    checksum: "{{ lib.checksum|default(omit) }}"
     owner: "{{ tomcat_user }}"
     group: "{{ tomcat_group }}"
   when:
