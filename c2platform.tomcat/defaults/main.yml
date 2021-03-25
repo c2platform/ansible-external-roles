@@ -88,7 +88,7 @@ tomcat_unarchive_url: "{{ _tomcat_unarchive_urls[tomcat_version].url }}"
 
 tomcat_listeners_default:
   - className: org.apache.catalina.core.AprLifecycleListener
-    SSLEgine: on
+    SSLEngine: on
   - className: org.apache.catalina.startup.VersionLoggerListener
   - className: org.apache.catalina.core.JreMemoryLeakPreventionListener
   - className: org.apache.catalina.mbeans.GlobalResourcesLifecycleListener
