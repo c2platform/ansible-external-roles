@@ -8,18 +8,6 @@
   notify:
     - restart tomcat instance
 
-- name: Slurp conf/server.xml
-  ansible.builtin.slurp:
-    src: "{{ tomcat_home_version }}/conf/server.xml"
-  register: server_xml
-
-- xml:
-    path: "{{ tomcat_home_version }}/conf/server.xml"
-    pretty_print: yes
-
-#- debug:
- #   msg: "{{server_xml| b64decode}}"
-
 - name: Configure conf/tomcat-users.xml
   template:
     src: tomcat-users.xml.j2
