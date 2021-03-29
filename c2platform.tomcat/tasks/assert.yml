@@ -111,7 +111,7 @@
   ansible.builtin.assert:
     that:
       - tomcat_service_enabled is defined
-      - tomcat_service_enabled is boolean
+#      - tomcat_service_enabled is boolean
     quiet: yes
 
 - name: test if tomcat_address is set correctly
@@ -125,7 +125,7 @@
   ansible.builtin.assert:
     that:
       - tomcat_access_log_enabled is defined
-      - tomcat_access_log_enabled is boolean
+#      - tomcat_access_log_enabled is boolean
     quiet: yes
 
 - name: test if tomcat_access_log_directory is set correctly
