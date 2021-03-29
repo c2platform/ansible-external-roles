@@ -1,24 +1,18 @@
 ---
-# defaults file for tomcat
-
-# Some "sane" defaults.
-tomcat_name: tomcat
-tomcat_directory: /opt
-tomcat_version: 8
+tomcat_home: /opt/tomcat
+tomcat_version: 9.0.40
+tomcat_home_version: "{{ tomcat_home  }}/{{ tomcat_home|basename }}-{{ tomcat_version }}"
+tomcat_home_link: "{{ tomcat_home  }}/{{ tomcat_home|basename }}"
 tomcat_user: tomcat
 tomcat_group: tomcat
-tomcat_xms: 512M
-tomcat_xmx: 1024M
 tomcat_non_ssl_connector_port: 8080
 tomcat_ssl_connector_port: 8443
 tomcat_shutdown_port: 8005
 tomcat_ajp_port: 8009
 tomcat_jre_home: /usr
+tomcat_service_name: tomcat
 tomcat_service_state: started
 tomcat_service_enabled: yes
-# You can bind Tomcat to a specified address globally using this variable, or
-# in the `tomcat_instances`. The `tomcat_instances.address` is more specific
-# so it takes priority over `tomcat_address`.
 tomcat_address: 0.0.0.0
 
 # Configure tomcat access logs
@@ -28,65 +22,24 @@ tomcat_access_log_prefix: localhost_access_log
 tomcat_access_log_suffix: ".txt"
 tomcat_access_log_pattern: "%h %l %u %t &quot;%r&quot; %s %b"
 
-# This role allows multiple installations of Apache Tomcat, each in their own
-# location, potentially of different version.
-# This is done by defining a "tomcat_instances" where "name:" is a unique
-# identifier of an instance.
-# The default tomcat_instances is one instance using the defaults described
-# in defaults/main.yml.
-tomcat_instances:
-  - name: "{{ tomcat_name }}"
-    version: "{{ tomcat_version }}"
-    user: "{{ tomcat_user }}"
-    group: "{{ tomcat_group }}"
-    xms: "{{ tomcat_xms }}"
-    xmx: "{{ tomcat_xmx }}"
-    non_ssl_connector_port: "{{ tomcat_non_ssl_connector_port }}"
-    ssl_connector_port: "{{ tomcat_ssl_connector_port }}"
-    shutdown_port: "{{ tomcat_shutdown_port }}"
-    ajp_port: "{{ tomcat_ajp_port }}"
-    ajp_secret: ""
-    # You can pick an address per instance:
-    # address: 127.0.0.1
-    java_opts:
-      - name: JRE_HOME
-        value: "{{ tomcat_jre_home }}"
-    access_log_enabled: "{{ tomcat_access_log_enabled }}"
-    access_log_directory: "{{ tomcat_access_log_directory }}"
-    access_log_prefix: "{{ tomcat_access_log_prefix }}"
-    access_log_suffix: "{{ tomcat_access_log_suffix }}"
-    access_log_pattern: "{{ tomcat_access_log_pattern }}"
-    service_state: "{{ tomcat_service_state }}"
-    service_enabled: "{{ tomcat_service_enabled }}"
-    # listeners:
-    #   - className: org.apache.catalina.core.AprLifecycleListener
-    #     SSLEgine: on
-    #   - className: org.apache.catalina.startup.VersionLoggerListener
-    #   - className: org.apache.catalina.core.JreMemoryLeakPreventionListener
-    #   - className: org.apache.catalina.mbeans.GlobalResourcesLifecycleListener
-    #   - className: org.apache.catalina.core.ThreadLocalLeakPreventionListener
+tomcat_environment_variables:
+  - name: JRE_HOME
+    value: "{{ tomcat_jre_home }}"
 
-# The explicit version to use when referring to the short name.
-tomcat_version7: 7.0.107
-tomcat_version8: 8.5.60
-tomcat_version9: 9.0.40
+tomcat_java_opts: >-
+  -Xms512m
+  -Xmx1024m
 
-# The location where to download Apache Tomcat from.
-tomcat_mirror: "https://archive.apache.org"
+tomcat_catalina_opts: >-
+  -Xms512m
+  -Xmx1024m
 
-# If you want to download Tomcat from another location, adjust these parameters
-# to your liking. For "normal" use, this does not require modification.
-_tomcat_unarchive_urls:
-  7:
-    url: "{{ tomcat_mirror }}/dist/tomcat/tomcat-7/v{{ tomcat_version7 }}/bin/apache-tomcat-{{ tomcat_version7 }}.tar.gz"
-  8:
-    url: "{{ tomcat_mirror }}/dist/tomcat/tomcat-8/v{{ tomcat_version8 }}/bin/apache-tomcat-{{ tomcat_version8 }}.tar.gz"
-  9:
-    url: "{{ tomcat_mirror }}/dist/tomcat/tomcat-9/v{{ tomcat_version9 }}/bin/apache-tomcat-{{ tomcat_version9 }}.tar.gz"
+tomcat_versions:
+  9.0.40:
+    url: https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.40/bin/apache-tomcat-9.0.40.tar.gz
+    checksum: "sha256: bb52b10b500f113dc4b504e34f4ac0a5f48f31d93ea261c721459a4b7e72ca52"
 
-tomcat_unarchive_url: "{{ _tomcat_unarchive_urls[tomcat_version].url }}"
-
-tomcat_listeners_default:
+tomcat_listeners:
   - className: org.apache.catalina.core.AprLifecycleListener
     SSLEngine: on
   - className: org.apache.catalina.startup.VersionLoggerListener
@@ -101,7 +54,7 @@ tomcat_services:
         protocol: HTTP/1.1
         connectionTimeout: 20000
         URIEncoding: UTF-8
-        # redirectPort: "{{ tomcat_ssl_connector_port }}" # https disabled
+        redirectPort: "{{ tomcat_ssl_connector_port }}"
       - port: 8443
         protocol: HTTP/1.1
         SSLEnabled: "true"
@@ -111,16 +64,16 @@ tomcat_services:
         clientAuth: false
         sslProtocol: TLSv1.2
         SSLCipherSuite: ECDHE-RSA-AES128-GCM-SHA256
-        SSLCertificateFile: /etc/ssl/myservice.crt
-        SSLCertificateKeyFile: /etc/ssl/myservice.key
+        SSLCertificateFile: /opt/tomcat/tomcat/conf/https.crt
+        SSLCertificateKeyFile: /opt/tomcat/tomcat/conf/https.key
         SSLHonorCipherOrder: "true"
         server: server
-        state: absent # # https disabled
+        #state: absent # https enabled
       - port: 8009
         protocol: AJP/1.3
         tomcatAuthentication: "true"
         secretRequired: "false"
-        # redirectPort: "{{ tomcat_ssl_connector_port }}" # https disabled
+        redirectPort: "{{ tomcat_ssl_connector_port }}"
     engine:
       properties:
         name: Catalina

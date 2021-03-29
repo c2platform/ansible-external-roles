@@ -1,0 +1,17 @@
+---
+- name: Create service
+  import_role:
+    name: robertdebock.service
+  vars:
+    service_list:
+      - name: "{{ tomcat_service_name }}"
+        description: "{{ tomcat_service_name }}"
+        start_command: "/bin/bash {{ tomcat_home_version }}/bin/catalina.sh run"
+        user_name: "{{ tomcat_user }}"
+        group_name: "{{ tomcat_group }}"
+
+- name: Manage service
+  service:
+    name: "{{ tomcat_service_name }}"
+    state: "{{ tomcat_service_state }}"
+    enabled: "{{ tomcat_service_enabled }}"

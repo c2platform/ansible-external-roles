@@ -1,6 +1,116 @@
-# [tomcat](#tomcat)
+# Ansible Role Tomcat
 
 Install and configure tomcat on your system.
+
+<!-- MarkdownTOC levels="2,3" autolink="true" -->
+
+- [Requirements](#requirements)
+  - [Java](#java)
+- [Role Variables](#role-variables)
+  - [Environment variables](#environment-variables)
+  - [Java options JAVA_OPTS](#java-options-java_opts)
+  - [Catalina options CATALINA_OPTS](#catalina-options-catalina_opts)
+- [Dependencies](#dependencies)
+- [Example Playbook](#example-playbook)
+- [Notes](#notes)
+- [Example Playbook](#example-playbook-1)
+- [```yaml](#yaml)
+- [```yaml](#yaml-1)
+- [Role Variables](#role-variables-1)
+- [```yaml](#yaml-2)
+- [Requirements](#requirements-1)
+- [Status of requirements](#status-of-requirements)
+- [Context](#context)
+- [Compatibility](#compatibility)
+- [Exceptions](#exceptions)
+- [Included version\(s\)](#included-versions)
+- [License](#license)
+- [Contributors](#contributors)
+- [Author Information](#author-information)
+
+<!-- /MarkdownTOC -->
+
+## Requirements
+
+<!-- Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required. -->
+
+### Java
+
+Tomcat requires Java to be installed. `java_home` directory, expose java_home set to Yes.
+
+## Role Variables
+
+<!--  A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well. -->
+
+### Environment variables
+
+To set for example `JAVA_HOME` or `JRE_HOME` in `setenv.sh`
+
+```yaml
+tomcat_environment_variables:
+  - name: JRE_HOME
+    value: "{{ tomcat_jre_home }}"
+```
+### Java options JAVA_OPTS
+
+Java runtime options aka `JAVA_OPTS` can be configured using `tomcat_java_opts` for example as follows:
+
+```yaml
+tomcat_java_opts: >-
+  -Xms512m
+  -Xmx1024m
+```
+
+### Catalina options CATALINA_OPTS
+
+Java runtime options `CATALINA_OPTS` can be configured using `tomcat_catalina_opts` for example as follows.
+
+```yaml
+tomcat_catalina_opts: >-
+  -Dcom.sun.management.jmxremote.port=8375
+  -Dcom.sun.management.jmxremote.ssl=false
+  -Dcom.sun.management.jmxremote.authenticate=false
+  -Dfile.encoding=UTF-8
+  -Dsun.net.inetaddr. ttl=300
+  -server
+  -Dorg.apache.tomcat.util.http.Parameters.MAX_COUNT=8192
+  -Xms3000m
+  -Xmx3000m
+  -XX:MaxPermSize=500m
+  -XX:+UseConcMarkSweepGC
+  -XX:+CMSIncrementalMode
+  -XX:+PrintGCDateStamps
+  -verbose:gc
+  -XX:+PrintGCDetails
+  -Xloggc:"/opt/tomcat9/logs/garbage.log"
+  -XX:+UseGCLogFileRotation
+  -XX:NumberOfGCLogFiles=10
+  -XX:GCLogFileSize=100M
+  -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory
+```
+
+
+
+## Dependencies
+
+<!--   A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles. -->
+
+## Example Playbook
+
+<!--   Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too: -->
+
+```yaml
+    - hosts: servers
+      roles:
+         - { role: username.rolename, x: 42 }
+```
+
+
+## Notes
+
+- [java - CATALINA_OPTS vs JAVA_OPTS - What is the difference? - Stack Overflow](https://stackoverflow.com/questions/11222365/catalina-opts-vs-java-opts-what-is-the-difference).
+
+
 
 |GitHub|GitLab|Quality|Downloads|Version|
 |------|------|-------|---------|-------|

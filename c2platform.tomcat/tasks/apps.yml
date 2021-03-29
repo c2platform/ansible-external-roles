@@ -1,0 +1,30 @@
+---
+- name: Deploy app
+  block:
+    - name: Properties folder
+      file:
+        path: "{{ app['properties_folder'] }}"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
+        state: directory
+        mode: 0755
+
+    - name: "Java properties {{ c2platform.mw.tomcat_properties_file_path(app['properties_folder']) }}"
+      template:
+        dest: "{{ app['name']|c2platform.mw.tomcat_properties_file_path(app['properties_folder']) }}"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
+        src: java.properties.j2
+        mode: 0644
+      #notify:
+      #  - restart tomcat instance
+
+    - name: "Download war {{ app['source']|basename }} → {{ app['filename'] }}"
+      get_url:
+        url: "{{ app['source'] }}"
+        dest: "{{ tomcat_home_version }}/webapps/{{ app['filename'] }}"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
+        validate_certs: no
+      when: app['source']|default(False) # redeploy?
+  when: app.deploy|default(True)

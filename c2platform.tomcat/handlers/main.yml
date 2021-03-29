@@ -1,13 +1,11 @@
 ---
-# handlers file for tomcat
-
 - name: systemctl daemon-reload
   ansible.builtin.systemd:
     daemon_reload: yes
 
 - name: restart tomcat instance
   ansible.builtin.service:
-    name: "{{ instance_name }}"
+    name: "{{ tomcat_service_name }}"
     state: restarted
   when:
     - not ansible_check_mode | bool

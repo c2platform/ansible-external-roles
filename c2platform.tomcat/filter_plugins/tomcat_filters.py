@@ -2,13 +2,6 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-# from ansible.errors import AnsibleFilterError
-# from pprint import pprint
-# import re
-# import json
-# import os
-# import hashlib
-
 
 # Return properties for element in servers.xml
 def tomcat_server_xml_properties(xml_props):

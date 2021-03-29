@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {{ ansible_managed | comment('xml') }}
-<Server port="{{ instance.shutdown_port | default(tomcat_shutdown_port) }}" shutdown="SHUTDOWN">
-{% for lstnr in instance.listeners|default(tomcat_listeners_default) %}
+<Server port="{{ tomcat_shutdown_port }}" shutdown="SHUTDOWN">
+{% for lstnr in tomcat_listeners %}
   <Listener {{ lstnr|tomcat_server_xml_properties }} />
 {% endfor %}
 

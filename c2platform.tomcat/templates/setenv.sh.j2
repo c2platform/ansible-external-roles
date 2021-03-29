@@ -1,23 +1,15 @@
 {{ ansible_managed | comment }}
 
-{% if instance.java_opts is defined %}
-{% for java_opt in instance.java_opts %}
+{% if tomcat_environment_variables is defined %}
+{% for java_opt in tomcat_environment_variables %}
 {{ java_opt.name }}="{{ java_opt.value }}"
 {% endfor %}
 {% endif %}
 
-{% if instance.xmx is defined %}
-JAVA_OPTS="-Xmx{{ instance.xmx }} ${JAVA_OPTS}"
-{% else %}
-JAVA_OPTS="-Xmx{{ tomcat_xmx }} ${JAVA_OPTS}"
+{% if tomcat_java_opts is defined %}
+JAVA_OPTS="{{ tomcat_java_opts }}"
 {% endif %}
 
-{% if instance.xms is defined %}
-JAVA_OPTS="-Xms{{ instance.xms }} ${JAVA_OPTS}"
-{% else %}
-JAVA_OPTS="-Xms{{ tomcat_xms }} ${JAVA_OPTS}"
-{% endif %}
-
-{% if instance.catalina_opts is defined %}
-CATALINA_OPTS="{{ instance.catalina_opts }}"
+{% if tomcat_catalina_opts is defined %}
+CATALINA_OPTS="{{ tomcat_catalina_opts }}"
 {% endif %}
