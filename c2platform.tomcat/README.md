@@ -82,7 +82,7 @@ tomcat_catalina_opts: >-
   -XX:+PrintGCDateStamps
   -verbose:gc
   -XX:+PrintGCDetails
-  -Xloggc:"/opt/tomcat9/logs/garbage.log"
+  -Xloggc:"{{ tomcat_home_version }}/logs/garbage.log"
   -XX:+UseGCLogFileRotation
   -XX:NumberOfGCLogFiles=10
   -XX:GCLogFileSize=100M
