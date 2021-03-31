@@ -10,6 +10,7 @@ Install and configure tomcat on your system.
   - [Environment variables](#environment-variables)
   - [Java options JAVA_OPTS](#java-options-java_opts)
   - [Catalina options CATALINA_OPTS](#catalina-options-catalina_opts)
+  - [Config from Git](#config-from-git)
 - [Dependencies](#dependencies)
 - [Example Playbook](#example-playbook)
 - [Notes](#notes)
@@ -89,7 +90,39 @@ tomcat_catalina_opts: >-
   -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory
 ```
 
+### Config from Git
 
+Using var `tomcat_git_config` you can fetch additional configuration for applications from a Git repository. 
+
+```yaml
+tomcat_git_config:
+  repo: https://github.com/c2platform/tomcat-git-config
+```
+For each application you can then define one or more configurations file to copy from the Git repository to the file system.
+
+```yaml
+tomcat_apps:
+  - name: broker
+    properties-git:
+      files:
+        t4_authorization:
+          dest: /etc/tomcat/suwinet/broker_t4_authorization.properties
+          source: myapp.properties 
+```
+
+This will create a clone of the configured repository in `/var/tmp` with prefix `tomcat-git-config`
+
+```bash
+root@bkd-broker:~# ls /var/tmp/tomcat-git-config-79971bb80eb8f641c1844d6c060c45c18a87ca81/
+LICENSE  myapp.properties  README.md
+```
+
+Note: if you want to provide authentication with the URL, the [Ansible git module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html) does not support that directly. You can put the credentials in the URL. 
+
+```yaml
+tomcat_git_config:
+  repo: {{ githubuser | urlencode }}:{{ githubpassword | urlencode }}@https://github.com/c2platform/tomcat-git-config
+```
 
 ## Dependencies
 

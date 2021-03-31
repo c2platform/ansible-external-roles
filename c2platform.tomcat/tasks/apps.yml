@@ -16,8 +16,8 @@
         group: "{{ tomcat_group }}"
         src: java.properties.j2
         mode: 0644
-      #notify:
-      #  - restart tomcat instance
+      notify:
+        - restart tomcat instance
 
     - name: "Download war {{ app['source']|basename }} → {{ app['filename'] }}"
       get_url:
@@ -27,4 +27,14 @@
         group: "{{ tomcat_group }}"
         validate_certs: no
       when: app['source']|default(False) # redeploy?
+
+    - name: Git config files
+      ansible.builtin.copy:
+        src: "{{ tomcat_git_config['dir'] }}/{{ app['properties-git']['files'][item]['source'] }}"
+        dest: "{{ app['properties-git']['files'][item]['dest'] }}"
+        remote_src: yes
+      with_items: "{{ app['properties-git']['files'] }}"
+      when: app['properties-git'] is defined
+      notify:
+        - restart tomcat instance
   when: app.deploy|default(True)
