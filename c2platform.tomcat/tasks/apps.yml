@@ -32,6 +32,8 @@
       ansible.builtin.copy:
         src: "{{ tomcat_git_config['dir'] }}/{{ app['properties-git']['files'][item]['source'] }}"
         dest: "{{ app['properties-git']['files'][item]['dest'] }}"
+        owner: "{{ tomcat_user }}"
+        group: "{{ tomcat_group }}"
         remote_src: yes
       with_items: "{{ app['properties-git']['files'] }}"
       when: app['properties-git'] is defined
