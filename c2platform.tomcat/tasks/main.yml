@@ -50,7 +50,7 @@
     loop_var: app
   when:
     - tomcat_apps is defined
-  no_log: yes
+  no_log: no
 
 - include: service.yml
 - include: lib.yml
