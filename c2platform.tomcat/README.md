@@ -10,6 +10,7 @@ Install and configure tomcat on your system.
   - [Environment variables](#environment-variables)
   - [Java options JAVA_OPTS](#java-options-java_opts)
   - [Catalina options CATALINA_OPTS](#catalina-options-catalina_opts)
+  - [Java CLASSPATH](#java-classpath)
   - [Config from Git](#config-from-git)
 - [Dependencies](#dependencies)
 - [Example Playbook](#example-playbook)
@@ -88,6 +89,14 @@ tomcat_catalina_opts: >-
   -XX:NumberOfGCLogFiles=10
   -XX:GCLogFileSize=100M
   -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory
+```
+
+### Java CLASSPATH
+
+To change the Tomcat `CLASSPATH` use `tomcat_classpath` 
+
+```yaml
+tomcat_classpath: /etc/tomcat/myapp:/etc/tomcat/otherapp  
 ```
 
 ### Config from Git

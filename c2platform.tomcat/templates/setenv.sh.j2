@@ -5,11 +5,12 @@
 {{ java_opt.name }}="{{ java_opt.value }}"
 {% endfor %}
 {% endif %}
-
 {% if tomcat_java_opts is defined %}
 JAVA_OPTS="{{ tomcat_java_opts }}"
 {% endif %}
-
 {% if tomcat_catalina_opts is defined %}
 CATALINA_OPTS="{{ tomcat_catalina_opts }}"
+{% endif %}
+{% if tomcat_classpath is defined %}
+CLASSPATH="{{ tomcat_classpath }}"
 {% endif %}
