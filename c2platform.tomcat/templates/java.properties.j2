@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 # Application: {{ app['name'] }}
 # Properties: {{ app['name']|c2platform.mw.tomcat_properties_file_path(app['properties_folder']) }}
-# Environment: {{ inventory_file|c2platform.core.ansible_environment }}
+# Inventory file: {{ inventory_file }}
 {% for prop in app['properties']|dictsort %}
 {{ prop[0] }}={{ prop[1] }}
 {% endfor %}
