@@ -3,15 +3,15 @@
   block:
     - name: Properties folder
       file:
-        path: "{{ app['properties_folder'] }}"
+        path: "{{ app['properties_folder']|default(tomcat_apps_properties_folder) }}"
         owner: "{{ tomcat_user }}"
         group: "{{ tomcat_group }}"
         state: directory
         mode: 0755
 
-    - name: "Java properties {{ c2platform.mw.tomcat_properties_file_path(app['properties_folder']) }}"
+    - name: "Java properties"
       template:
-        dest: "{{ app['name']|c2platform.mw.tomcat_properties_file_path(app['properties_folder']) }}"
+        dest: "{{ app['name']|c2platform.mw.tomcat_properties_file_path(app['properties_folder']|default(tomcat_apps_properties_folder)) }}"
         owner: "{{ tomcat_user }}"
         group: "{{ tomcat_group }}"
         src: java.properties.j2
