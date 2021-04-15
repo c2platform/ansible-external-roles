@@ -122,7 +122,7 @@ tomcat_apps:
 This will create a clone of the configured repository in `/var/tmp` with prefix `tomcat-git-config`
 
 ```bash
-root@bkd-broker:~# ls /var/tmp/tomcat-git-config-79971bb80eb8f641c1844d6c060c45c18a87ca81/
+root@bkd-brut:~# ls /var/tmp/tomcat-git-config-79971bb80eb8f641c1844d6c060c45c18a87ca81/
 LICENSE  myapp.properties  README.md
 ```
 
