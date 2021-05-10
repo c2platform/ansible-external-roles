@@ -36,6 +36,9 @@
         <Valve {{ vlv|tomcat_server_xml_properties }} />
 {%     endif %}
 {%   endfor %}
+{%   for ctx in srv['engine']['host']['contexts'] %}
+        <Context {{ ctx|tomcat_server_xml_properties }} />
+{%   endfor %}
       </Host>
     </Engine>
   </Service>

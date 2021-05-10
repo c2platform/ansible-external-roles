@@ -12,6 +12,7 @@ Install and configure tomcat on your system.
   - [Catalina options CATALINA_OPTS](#catalina-options-catalina_opts)
   - [Java CLASSPATH](#java-classpath)
   - [Config from Git](#config-from-git)
+  - [Contexts e.g. ROOT](#contexts-eg-root)
 - [Dependencies](#dependencies)
 - [Example Playbook](#example-playbook)
 - [Notes](#notes)
@@ -131,6 +132,32 @@ Note: if you want to provide authentication with the URL, the [Ansible git modul
 ```yaml
 tomcat_git_config:
   repo: {{ githubuser | urlencode }}:{{ githubpassword | urlencode }}@https://github.com/c2platform/tomcat-git-config
+```
+
+### Contexts e.g. ROOT
+
+Using `contexts` `Context` elements can be added for example to make a certain application run in the root context. Example fragment below places an application `ig` in the root context.
+
+```yaml
+tomcat_services:
+  - name: Catalina
+    engine:
+      host:
+        contexts:
+          - path: ''
+            docBase: ig
+          - path: ROOT
+            docBase: ROOT          
+```
+
+This fragment will generate for example in `server.xml` the `Context` elements as shown below
+
+```xml
+      <Host name="localhost" appBase="webapps" unpackWARS="true" autoDeploy="true" >
+        <Valve className="org.apache.catalina.valves.ErrorReportValve" showReport="false" showServerInfo="false"  />
+        <Context path="" docBase="ig"  />
+        <Context path="ROOT" docBase="ROOT"  />
+      </Host>
 ```
 
 ## Dependencies
