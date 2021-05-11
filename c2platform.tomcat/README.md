@@ -13,6 +13,7 @@ Install and configure tomcat on your system.
   - [Java CLASSPATH](#java-classpath)
   - [Config from Git](#config-from-git)
   - [Contexts e.g. ROOT](#contexts-eg-root)
+  - [Certificate Subject Alternative Names](#certificate-subject-alternative-names)
 - [Dependencies](#dependencies)
 - [Example Playbook](#example-playbook)
 - [Notes](#notes)
@@ -159,6 +160,19 @@ This fragment will generate for example in `server.xml` the `Context` elements a
         <Context path="ROOT" docBase="ROOT"  />
       </Host>
 ```
+
+### Certificate Subject Alternative Names
+
+Use `tomcat_cert_subject_alt_names` to configure alternative names see [rfc5280](https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.6) and [openssl_csr](https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_csr_module.html#parameter-subject_alt_name).
+
+```yaml
+tomcat_cert_subject_alt_names:
+  - DNS:www.my-nice-fqdn.com
+  - DNS:my-nice-fqdn.com
+```
+
+Note: for the common name default `ansible_fqdn` is used.
+
 
 ## Dependencies
 

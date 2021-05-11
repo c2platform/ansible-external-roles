@@ -13,6 +13,7 @@
     organization_name: ""
     email_address: ""
     common_name: "{{ ansible_fqdn }}"
+    subject_alt_name: "{{ tomcat_cert_subject_alt_names|default(omit) }}"
     owner: "{{ tomcat_user }}"
     group: "{{ tomcat_group }}"
 
