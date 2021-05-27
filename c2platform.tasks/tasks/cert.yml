@@ -1,0 +1,12 @@
+---
+- fail:
+    msg: "cacerts_ca_server is not defined"
+  when: not cacerts_ca_server is defined
+
+- name: Certificates for domain
+  include_tasks: "_cert_domain.yml"
+  vars:
+    ca_domain_cert: "{{ cacerts_ca_domains[domain] }}"
+  with_items: "{{ cacerts_ca_domains }}"
+  loop_control:
+    loop_var: domain

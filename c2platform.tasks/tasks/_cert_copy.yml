@@ -1,0 +1,29 @@
+---
+- name: Copy private key
+  copy:
+    src: "/tmp/{{ cert_key.filename|basename }}"
+    dest: "{{ pth['key'] }}"
+  with_items: "{{ cacerts_certificate[cacerts_group_key]['paths'] }}"
+  loop_control:
+    loop_var: pth
+  when: pth['key'] is defined
+
+- name: Copy certificate
+  copy:
+    src: "/tmp/{{ cert_crt.filename|basename }}"
+    dest: "{{ pth['crt'] }}"
+  with_items: "{{ cacerts_certificate[cacerts_group_key]['paths'] }}"
+  loop_control:
+    loop_var: pth
+  notify: "{{ cacerts_certificate[cacerts_group_key]['notify']|default(omit) }}"
+  when: pth['crt'] is defined
+
+- name: Copy pem
+  copy:
+    src: "/tmp/{{ ca_domain_cert[cert_deploy]['common_name'] }}.pem"
+    dest: "{{ pth['pem'] }}"
+  with_items: "{{ cacerts_certificate[cacerts_group_key]['paths'] }}"
+  loop_control:
+    loop_var: pth
+  notify: "{{ cacerts_certificate[cacerts_group_key]['notify']|default(omit) }}"
+  when: pth['pem'] is defined

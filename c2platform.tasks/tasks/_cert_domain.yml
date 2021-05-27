@@ -1,0 +1,6 @@
+---
+- name: Certificates for domain
+  include_tasks: "_cert.yml"
+  with_items: "{{ cacerts_ca_domains[domain] }}"
+  loop_control:
+    loop_var: cert_deploy
