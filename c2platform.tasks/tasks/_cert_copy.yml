@@ -3,6 +3,8 @@
   copy:
     src: "/tmp/{{ cert_key.filename|basename }}"
     dest: "{{ pth['key'] }}"
+    owner: "{{ pth['owner']|default(omit) }}"
+    group: "{{ pth['group']|default(omit) }}"
   with_items: "{{ cacerts_certificate[cacerts_group_key]['paths'] }}"
   loop_control:
     loop_var: pth
@@ -12,6 +14,8 @@
   copy:
     src: "/tmp/{{ cert_crt.filename|basename }}"
     dest: "{{ pth['crt'] }}"
+    owner: "{{ pth['owner']|default(omit) }}"
+    group: "{{ pth['group']|default(omit) }}"
   with_items: "{{ cacerts_certificate[cacerts_group_key]['paths'] }}"
   loop_control:
     loop_var: pth
@@ -22,6 +26,8 @@
   copy:
     src: "/tmp/{{ ca_domain_cert[cert_deploy]['common_name'] }}.pem"
     dest: "{{ pth['pem'] }}"
+    owner: "{{ pth['owner']|default(omit) }}"
+    group: "{{ pth['group']|default(omit) }}"
   with_items: "{{ cacerts_certificate[cacerts_group_key]['paths'] }}"
   loop_control:
     loop_var: pth
