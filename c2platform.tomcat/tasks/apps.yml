@@ -41,4 +41,5 @@
       when: app['properties-git'] is defined
       notify:
         - restart tomcat instance
+      ignore_errors: "{{ app['properties-git']['files'][item]['ignore_errors']|default(False) }}"
   when: app.deploy|default(True)
