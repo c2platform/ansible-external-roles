@@ -37,6 +37,7 @@
       community.crypto.openssl_privatekey:
         path: "{{ cacerts_dir_fqdn }}/{{ ca_domain_cert[cert_deploy]['common_name'] }}.key"
         force: "{{ ca_domain_cert[cert_deploy]['force']|default(False) }}"
+        # TODO password
       register: cert_key
 
     - name: Generate an OpenSSL Certificate Signing Request
