@@ -39,4 +39,16 @@
         loop_var: pth
       notify: "{{ cacerts_certificate[cacerts_group_key]['notify']|default(omit) }}"
       when: pth['pem'] is defined
+
+    - name: Copy p12
+      copy:
+        src: "/tmp/{{ ca_domain_cert[cert_deploy]['common_name'] }}.p12"
+        dest: "{{ pth['p12'] }}"
+        owner: "{{ pth['owner']|default(omit) }}"
+        group: "{{ pth['group']|default(omit) }}"
+      with_items: "{{ cacerts_certificate[cacerts_group_key]['paths'] }}"
+      loop_control:
+        loop_var: pth
+      notify: "{{ cacerts_certificate[cacerts_group_key]['notify']|default(omit) }}"
+      when: pth['p12'] is defined
   when: dest_parent.stat.exists
