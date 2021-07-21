@@ -2,7 +2,7 @@
 - block:
     - set_fact: # e.g. /opt/ca/mydomain.com
         cacerts_dir_domain: "{{ cacerts_ca_dir }}/{{ domain }}"
-        cacerts_dir_fqdn: "{{ cacerts_ca_dir }}/{{ domain }}/{{ ansible_fqdn }}"
+        cacerts_dir_fqdn: "{{ cacerts_ca_dir }}/{{ domain }}/{{ ca_domain_cert[cert_deploy]['group']|default(ansible_fqdn) }}"
 
     - name: Node certs dir # e.g. /opt/ca/mydomain.com/myserver.mydomain.local
       file:
@@ -96,6 +96,7 @@
         - "{{ cert_key.filename }}"
         - "{{ cert_crt.filename }}"
         - "{{ cacerts_dir_fqdn }}/{{ ca_domain_cert[cert_deploy]['common_name'] }}.pem"
+        - "{{ cert_p12.filename }}"
       loop_control:
         loop_var: ck
       changed_when: cert_crt.changed or cert_crt.changed
