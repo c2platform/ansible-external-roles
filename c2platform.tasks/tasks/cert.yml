@@ -10,3 +10,4 @@
   with_items: "{{ cacerts_ca_domains }}"
   loop_control:
     loop_var: domain
+  when: common_cacerts_enable|default(False)
