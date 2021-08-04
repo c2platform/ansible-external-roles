@@ -33,12 +33,6 @@
       - tomcat_group is string
     quiet: yes
 
-- name: test if tomcat_java_opts is set correctly
-  ansible.builtin.assert:
-    that:
-      - tomcat_java_opts is defined
-    quiet: yes
-
 - name: test if tomcat_catalina_opts is set correctly
   ansible.builtin.assert:
     that:

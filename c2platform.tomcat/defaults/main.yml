@@ -27,9 +27,9 @@ tomcat_environment_variables:
   - name: JRE_HOME
     value: "{{ tomcat_jre_home }}"
 
-tomcat_java_opts: >-
-  -Xms512m
-  -Xmx1024m
+#tomcat_java_opts: >-
+#  -Xms512m
+#  -Xmx1024m
 
 tomcat_catalina_opts: >-
   -Xms512m
