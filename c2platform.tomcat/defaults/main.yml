@@ -133,3 +133,6 @@ tomcat_manager:
   valve:
     className: org.apache.catalina.valves.RemoteAddrValve
     allow: "127\\.\\d+\\.\\d+\\.\\d+|::1|0:0:0:0:0:0:0:1"
+
+tomcat_git_config_control_node: no
+tomcat_git_config_parent_dir: /var/tmp

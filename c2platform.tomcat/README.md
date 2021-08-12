@@ -2,7 +2,7 @@
 
 Install and configure tomcat on your system.
 
-<!-- MarkdownTOC levels="2,3" autolink="true" -->
+<!-- MarkdownTOC levels="2,3,4" autolink="true" -->
 
 - [Requirements](#requirements)
   - [Java](#java)
@@ -12,6 +12,7 @@ Install and configure tomcat on your system.
   - [Catalina options CATALINA_OPTS](#catalina-options-catalina_opts)
   - [Java CLASSPATH](#java-classpath)
   - [Config from Git](#config-from-git)
+    - [Delegate to control node](#delegate-to-control-node)
   - [Contexts e.g. ROOT](#contexts-eg-root)
   - [Certificate Subject Alternative Names](#certificate-subject-alternative-names)
 - [Dependencies](#dependencies)
@@ -119,6 +120,16 @@ Note: if you want to provide authentication with the URL, the [Ansible git modul
 ```yaml
 tomcat_git_config:
   repo: {{ githubuser | urlencode }}:{{ githubpassword | urlencode }}@https://github.com/c2platform/tomcat-git-config
+```
+
+The git clone will be created by default in directory `tomcat_git_config_parent_dir` which is default `/var/tmp`.
+
+#### Delegate to control node
+
+It is possible to delegate the git clone to the control node using
+
+```yaml
+tomcat_git_config_control_node: yes
 ```
 
 ### Contexts e.g. ROOT

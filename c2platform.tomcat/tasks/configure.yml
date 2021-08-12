@@ -31,11 +31,16 @@
         tomcat_git_config:
           dir:  "/var/tmp/tomcat-git-config-{{ tomcat_git_config['repo']|hash('sha1') }}"
 
+    - set_fact:
+        tomcat_git_clone_delegate: localhost
+      when: tomcat_git_config_control_node
+
     - name: Git checkout
       ansible.builtin.git:
         repo: "{{ tomcat_git_config['repo'] }}"
         dest: "{{ tomcat_git_config['dir'] }}"
         version: "{{ tomcat_git_config['version']|default(omit) }}"
+      delegate_to: "{{ tomcat_git_clone_delegate|default(omit) }}"
       when: tomcat_git_config is defined
       changed_when: False
   when: tomcat_git_config is defined

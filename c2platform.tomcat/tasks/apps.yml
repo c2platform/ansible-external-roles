@@ -36,7 +36,7 @@
         dest: "{{ app['properties-git']['files'][item]['dest'] }}"
         owner: "{{ tomcat_user }}"
         group: "{{ tomcat_group }}"
-        remote_src: yes
+        remote_src: "{{ not tomcat_git_config_control_node }}"
       with_items: "{{ app['properties-git']['files'] }}"
       when: app['properties-git'] is defined
       notify:
