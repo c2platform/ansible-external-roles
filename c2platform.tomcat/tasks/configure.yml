@@ -29,7 +29,7 @@
 - block:
     - set_fact:
         tomcat_git_config:
-          dir:  "/var/tmp/tomcat-git-config-{{ tomcat_git_config['repo']|hash('sha1') }}"
+          dir:  "{{ tomcat_git_config_parent_dir }}/tomcat-git-config-{{ tomcat_git_config['repo']|hash('sha1') }}"
 
     - set_fact:
         tomcat_git_clone_delegate: localhost
