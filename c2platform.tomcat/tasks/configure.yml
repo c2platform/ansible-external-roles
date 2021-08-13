@@ -27,20 +27,27 @@
     - restart tomcat instance
 
 - block:
-    - set_fact:
-        tomcat_git_config:
-          dir:  "{{ tomcat_git_config_parent_dir }}/tomcat-git-config-{{ tomcat_git_config['repo']|hash('sha1') }}"
+  - set_fact:
+      tomcat_git_config:
+        dir:  "{{ tomcat_git_config_parent_dir }}/tomcat-git-config-{{ tomcat_git_config['repo']|hash('sha1') }}"
 
-    - set_fact:
-        tomcat_git_clone_delegate: localhost
-      when: tomcat_git_config_control_node
+  - set_fact:
+      tomcat_git_clone_delegate: localhost
+    when: tomcat_git_config_control_node
 
-    - name: Git checkout
-      ansible.builtin.git:
-        repo: "{{ tomcat_git_config['repo'] }}"
-        dest: "{{ tomcat_git_config['dir'] }}"
-        version: "{{ tomcat_git_config['version']|default(omit) }}"
-      delegate_to: "{{ tomcat_git_clone_delegate|default(omit) }}"
-      when: tomcat_git_config is defined
-      changed_when: False
+  # Ansible Git module does support config
+  - name: Git checkout ( custom )
+    shell: "{{ tomcat_git_config_script }}"
+    delegate_to: "{{ tomcat_git_clone_delegate|default(omit) }}"
+    changed_when: False
+    when: tomcat_git_config_script is defined
+
+  - name: Git checkout
+    ansible.builtin.git:
+      repo: "{{ tomcat_git_config['repo'] }}"
+      dest: "{{ tomcat_git_config['dir'] }}"
+      version: "{{ tomcat_git_config['version']|default(omit) }}"
+    delegate_to: "{{ tomcat_git_clone_delegate|default(omit) }}"
+    changed_when: False
+    when: not tomcat_git_config_script is defined
   when: tomcat_git_config is defined

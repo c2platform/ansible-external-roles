@@ -13,6 +13,7 @@ Install and configure tomcat on your system.
   - [Java CLASSPATH](#java-classpath)
   - [Config from Git](#config-from-git)
     - [Delegate to control node](#delegate-to-control-node)
+    - [Custom Git checkout](#custom-git-checkout)
   - [Contexts e.g. ROOT](#contexts-eg-root)
   - [Certificate Subject Alternative Names](#certificate-subject-alternative-names)
 - [Dependencies](#dependencies)
@@ -90,7 +91,7 @@ tomcat_classpath: /etc/tomcat/myapp:/etc/tomcat/otherapp
 
 ### Config from Git
 
-Using var `tomcat_git_config` you can fetch additional configuration for applications from a Git repository. 
+Using var `tomcat_git_config` you can fetch additional configuration for applications from a Git repository using [ansible.builtin.git](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html)
 
 ```yaml
 tomcat_git_config:
@@ -130,6 +131,23 @@ It is possible to delegate the git clone to the control node using
 
 ```yaml
 tomcat_git_config_control_node: yes
+```
+
+#### Custom Git checkout
+
+The [ansible.builtin.git](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html) module has limitations for example you cannot configure a proxy server. In fact you cannot do any [git configuration](https://www.git-scm.com/book/en/v2/Customizing-Git-Git-Configuration) with this module. Using `tomcat_git_config_script` you can provide your own Git checkout script for example:
+
+
+```yaml
+tomcat_git_config_script: |
+  if [ ! -d "{{ tomcat_git_config['dir'] }}" ]; then
+    git init {{ tomcat_git_config['dir'] }}
+    cd {{ tomcat_git_config['dir'] }}
+    git remote add origin {{ tomcat_git_config['repo'] }}
+    git config http.proxy {{ tomcat_git_config['proxy'] }}
+  fi
+  cd {{ tomcat_git_config['dir'] }}  
+  git pull origin master
 ```
 
 ### Contexts e.g. ROOT
