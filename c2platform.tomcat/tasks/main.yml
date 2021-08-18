@@ -40,6 +40,8 @@
   when: not bin_folder.stat.exists
 
 - include: configure.yml
+- include: git_repos.yml
+  when: tomcat_git_config is defined
 - include: configure_manager.yml
 - include: cert.yml
 
