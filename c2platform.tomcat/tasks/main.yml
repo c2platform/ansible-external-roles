@@ -57,3 +57,12 @@
 - include: service.yml
 - include: lib.yml
 #- include: jmx.yml
+
+- name: PAM limits # /etc/security/limits.conf
+  pam_limits:
+    domain: "{{ tomcat_user }}"
+    limit_type: "{{ item['limit_type'] }}"
+    limit_item: nofile
+    value: "{{ item['value'] }}"
+  with_items: "{{ tomcat_pam_limits_nofile }}"
+  when: tomcat_pam_limits_nofile is defined

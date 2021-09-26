@@ -15,6 +15,7 @@ Install and configure tomcat on your system.
     - [Delegate to control node](#delegate-to-control-node)
     - [Custom Git checkout](#custom-git-checkout)
   - [Contexts e.g. ROOT](#contexts-eg-root)
+  - [PAM limites](#pam-limites)
   - [Certificate Subject Alternative Names](#certificate-subject-alternative-names)
 - [Dependencies](#dependencies)
 - [Example Playbook](#example-playbook)
@@ -174,6 +175,17 @@ This fragment will generate for example in `server.xml` the `Context` elements a
         <Context path="" docBase="ig"  />
         <Context path="ROOT" docBase="ROOT"  />
       </Host>
+```
+### PAM limites
+
+Using `tomcat_pam_limits_nofile` set PAM limits for example
+
+```yaml
+tomcat_pam_limits_nofile:
+- limit_type: soft
+  value: 65536
+- limit_type: hard
+  value: 131072
 ```
 
 ### Certificate Subject Alternative Names
