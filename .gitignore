@@ -12,3 +12,5 @@ roles/external/ansible-thoteam.nexus3-oss/target/*
 roles/external/ansible-thoteam.nexus3-oss/.*
 .chef/nodes/*.json
 downloads
+geerlingguy.git
+geerlingguy.certbot
